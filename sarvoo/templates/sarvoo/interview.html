@@ -7,14 +7,19 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
     <script src="https://storage.googleapis.com/meet/render/iframe_dist.html"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          gapi.load('meet', function(){
+            var meeting = new gapi.meet.Meeting({ 'meetingId': '{{ id }}' });
+            meeting.attachToElement(document.getElementById('meet-embed'));
+          });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
-        <h2>Welcome to Saroov AI!</h2>
-        <form action="{% url 'create_and_launch_meeting' %}" method="post">
-            {% csrf_token %}
-            <button type="submit">New Interview</button>
-        </form>
+        <div id="meet-embed"></div>
+        <div>Sarvoo is always the first to join!</div>
     </div>
 </body>
 </html>
