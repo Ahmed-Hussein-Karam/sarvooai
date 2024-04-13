@@ -1,25 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
-    <script src="https://storage.googleapis.com/meet/render/iframe_dist.html"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-          gapi.load('meet', function(){
-            var meeting = new gapi.meet.Meeting({ 'meetingId': '{{ id }}' });
-            meeting.attachToElement(document.getElementById('meet-embed'));
-          });
-        });
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  {% load static %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/interview.css' %}">
+  <script src="https://apis.google.com/js/api.js"></script>
 </head>
+
 <body>
+  <div class="container">
     <div class="container">
-        <div id="meet-embed"></div>
-        <div>Sarvoo is always the first to join!</div>
+      <h1>Welcome to the Meeting</h1>
+      <p>Click the button below to join the meeting:</p>
+      <a id="meetingLink" class="button" href="#" target="_blank">Join Meeting</a>
     </div>
+  </div>
+
+  <script>
+    const googleMeetUrl = "https://meet.google.com/"
+
+    function getUrlParam(name, url = window.location.href) {
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+      if (!results) return null;
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    }
+
+    var meetingLink = googleMeetUrl + getUrlParam('id');
+    var meetingLinkElement = document.getElementById('meetingLink');
+    meetingLinkElement.href = meetingLink;
+  </script>
 </body>
+
 </html>
