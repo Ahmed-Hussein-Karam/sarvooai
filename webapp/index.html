@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f8f9fa;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #outputDiv, #cvDiv {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        min-height: 100px;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+      #cvFileInput {
+        display: none; /* Hide the default file input */
+      }
+      .custom-file-upload {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .custom-file-upload:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sarvoo AI</h1>
+    <label>Upload candidate CV:</label>
+    <label for="cvFileInput" class="custom-file-upload">Choose File</label>
+    <input type="file" id="cvFileInput" accept=".txt" onchange="handleFileSelect(event)">
+  
+    <button onclick="uploadCV()">Upload CV and Read</button>
+    <button onclick="fetchTranscript()">Ask Sarvoo!</button>
+    <div id="outputDiv"></div>
+
+    <script>
+      function handleFileSelect(event) {
+        var file = event.target.files[0];
+        
+        if (file) {
+          var reader = new FileReader();
+          reader.onload = function(event) {
+            var content = event.target.result;
+            var base64Content = btoa(content); // Convert to base64-encoded string
+            google.script.run.withSuccessHandler(displayCvText).extractTextFromCv(base64Content);
+          };
+          reader.readAsText(file);
+        } else {
+          alert('Please select a TXT file to upload.');
+        }
+      }
+
+      function displayCvText(text) {
+        var outputDiv = document.getElementById('outputDiv');
+        outputDiv.textContent = text;
+      }
+
+      function fetchTranscript() {
+        google.script.run.withSuccessHandler(displayTranscript).fetchTranscript();
+      }
+
+      function displayTranscript(transcriptText) {
+        var outputDiv = document.getElementById('outputDiv');
+        outputDiv.textContent = transcriptText;
+      }
+    </script>
+  </body>
+</html>
